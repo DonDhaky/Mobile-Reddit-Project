@@ -22,23 +22,23 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Expo V3",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color }) => <TabBarIcon name="reddit" color={color} />,
         }}
       />
 
       <Tabs.Screen
         name="tab1"
         options={{
-          title: "Tab 1",
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          title: "Profile",
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
       <Tabs.Screen
         name="tab2"
         options={{
-          title: "Tab 2",
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          title: "Parameters",
+          tabBarIcon: ({ color }) => <TabBarIcon name="info-circle" color={color} />,
         }}
       />
     </Tabs>

@@ -2,8 +2,9 @@ import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { Button } from 'react-native';
-import { Box, ScrollView } from '@gluestack-ui/themed';
-import { dotenv } from 'react-native';
+import { Box, View } from '@gluestack-ui/themed';
+import { router } from 'expo-router'
+import { CLIENT_ID, REDIRECT_URI } from "@env";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -13,16 +14,13 @@ const discovery = {
   tokenEndpoint: 'https://www.reddit.com/api/v1/access_token',
 };
 
-// const CLIENT_ID = process.env.CLIENT_ID
-// const REDIRECT_URI = process.env.REDIRECT_URI
-
 export default function App() {
   const [request, response, promptAsync] = useAuthRequest(
     {
-      clientId: 'xCC8ps1LpPrNelUlJzEMAw',
+      clientId: CLIENT_ID, /////////////////////////////// récupération des variables d'env grâce à l'import de "@env"
       scopes: ['identity'],
       redirectUri: makeRedirectUri({
-        native: "exp://pilavjk-anonymous-8082.exp.direct",
+        native: REDIRECT_URI, 
       }),
     },
     discovery
@@ -31,20 +29,23 @@ export default function App() {
   React.useEffect(() => {
     if (response?.type === 'success') {
       const { code } = response.params;
+      console.log(code);
+      console.log(response);
+      router.push('/tabs');
     }
   }, [response]);
 
   return (
-    <ScrollView>
+    <View>
     <Box marginTop="50%">
     <Button
       disabled={!request}
-      title="Login with Reddit"
+      title="Login"
       onPress={() => {
         promptAsync();
       }}
     />
     </Box>
-    </ScrollView>
+    </View>
   );
 }

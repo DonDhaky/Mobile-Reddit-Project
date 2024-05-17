@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 import { Button } from 'react-native';
-import { Box, ScrollView } from '@gluestack-ui/themed';
-import { dotenv } from 'react-native';
+import { Box, View } from '@gluestack-ui/themed';
+import { router } from 'expo-router'
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -19,10 +19,10 @@ const discovery = {
 export default function App() {
   const [request, response, promptAsync] = useAuthRequest(
     {
-      clientId: 'xCC8ps1LpPrNelUlJzEMAw',
+      clientId: 'xCC8ps1LpPrNelUlJzEMAw', /////////////////////////////// ATTENTION A CHANGER
       scopes: ['identity'],
       redirectUri: makeRedirectUri({
-        native: "exp://pilavjk-anonymous-8082.exp.direct",
+        native: "exp://pilavjk-anonymous-8081.exp.direct", 
       }),
     },
     discovery
@@ -31,20 +31,21 @@ export default function App() {
   React.useEffect(() => {
     if (response?.type === 'success') {
       const { code } = response.params;
+      router.push('/tabs');
     }
   }, [response]);
 
   return (
-    <ScrollView>
+    <View>
     <Box marginTop="50%">
     <Button
       disabled={!request}
-      title="Login with Reddit"
+      title="Login"
       onPress={() => {
         promptAsync();
       }}
     />
     </Box>
-    </ScrollView>
+    </View>
   );
 }

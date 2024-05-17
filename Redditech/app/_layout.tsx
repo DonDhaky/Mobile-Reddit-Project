@@ -17,10 +17,10 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
-// export const unstable_settings = {
-//   // Ensure that reloading on `/modal` keeps a back button present.
-//   initialRouteName: "gluestack",
-// };
+export const unstable_settings = {
+  // Ensure that reloading on `/modal` keeps a back button present.
+  initialRouteName: "gluestack",
+};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -43,13 +43,13 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  // useLayoutEffect(() => {
-  //   setStyleLoaded(true);
-  // }, [styleLoaded]);
+  useLayoutEffect(() => {
+    setStyleLoaded(true);
+  }, [styleLoaded]);
 
-  // if (!loaded || !styleLoaded) {
-  //   return null;
-  // }
+  if (!loaded || !styleLoaded) {
+    return null;
+  }
 
   return <RootLayoutNav />;
 }

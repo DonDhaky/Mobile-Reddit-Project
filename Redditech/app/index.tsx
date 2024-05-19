@@ -33,30 +33,31 @@ export default function App() {
   );
 
 
-  const [userTitle, setUserTitle] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [myArray, setUserIcon] = React.useState("");
-  const [description, setUserdescription] = React.useState("");
+  // const [userTitle, setUserTitle] = React.useState("");
+  // const [username, setUsername] = React.useState("");
+  // const [myArray, setUserIcon] = React.useState("");
+  // const [description, setUserdescription] = React.useState("");
 
   const [isLoggedIn, setIsLoggedIn] = React.useState(false); // gestion apparition bouton de connexion 
+  
   React.useEffect(() => {
     const checkAccessToken = async () => {
       const accessToken = await AsyncStorage.getItem('access_token');
       if (accessToken) {
-        setIsLoggedIn(true);
+        router.push('/tabs');
       }
     };
     checkAccessToken();
   }, []);
   
-  const logout = () => {
-    setIsLoggedIn(false);
-    setUserTitle("");
-    setUsername("");
-    setUserIcon("");
-    setUserdescription("");
-    AsyncStorage.removeItem('access_token');
-  };
+  // const logout = () => {
+  //   setIsLoggedIn(false);
+  //   setUserTitle("");
+  //   setUsername("");
+  //   setUserIcon("");
+  //   setUserdescription("");
+  //   AsyncStorage.removeItem('access_token');
+  // };
   
   React.useEffect(() => {
     if (response?.type === "success") {
@@ -65,6 +66,7 @@ export default function App() {
       console.log("Oauth Access Code:", code_code);
       const redirectUri = REDIRECT_URI;
       setIsLoggedIn(true);
+      router.push('/tabs');
 
       fetch("https://www.reddit.com/api/v1/access_token", {
         method: "POST",
@@ -80,50 +82,51 @@ export default function App() {
         .then((data) => {
           const accessToken = data.access_token;
           console.log("Access Token:", accessToken);
-          // Fetch user data
-          return fetch("https://oauth.reddit.com/api/v1/me", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-        })
-        .then((userRes) => {
-          return userRes.json();
-        })
-        .then((userData) => {
-          console.log("User data:", userData);
-          const username = userData.name;
-          console.log("Username: ", username);
-          const usertitle = userData.subreddit.title;
-          console.log("Title: ", usertitle);
-          const userIcon = userData.icon_img;
-          const myArray = userIcon.split('?');
-          console.log("Icon", userIcon);
-          const description = userData.subreddit.public_description; 
-          console.log('Description User :', description);
 
-          setUsername(username);
-          setUserTitle(usertitle);
-          setUserdescription(description);
-
-          // Check if the Url is not empty, pourquoi corriger l'erreur de url vide
-          if (myArray[0]) {
-            setUserIcon(myArray[0]);
-          }
-          else {
-            console.log("User icon Url est vide pelo c'est la merde");
-          }
-          
-          // stockage de l'access token
           AsyncStorage.setItem('access_token', data.access_token);
 
-        });
-   // if (response?.type === 'success') {
-     // const { code } = response.params;
-     // console.log(code);
-     // console.log(response);
-     // router.push('/tabs');
+          router.push('/tabs');
+
+          // // Fetch user data
+          // return fetch("https://oauth.reddit.com/api/v1/me", {
+          //   method: "GET",
+          //   headers: {
+          //     Authorization: `Bearer ${accessToken}`,
+          //   },
+          // });
+        })
+
+        // .then((userRes) => {
+        //   return userRes.json();
+        // })
+        // .then((userData) => {
+        //   console.log("User data:", userData);
+        //   const username = userData.name;
+        //   console.log("Username: ", username);
+        //   const usertitle = userData.subreddit.title;
+        //   console.log("Title: ", usertitle);
+        //   const userIcon = userData.icon_img;
+        //   const myArray = userIcon.split('?');
+        //   console.log("Icon", userIcon);
+        //   const description = userData.subreddit.public_description; 
+        //   console.log('Description User :', description);
+
+        //   setUsername(username);
+        //   setUserTitle(usertitle);
+        //   setUserdescription(description);
+
+        //   // Check if the Url is not empty, pourquoi corriger l'erreur de url vide
+        //   if (myArray[0]) {
+        //     setUserIcon(myArray[0]);
+        //   }
+        //   else {
+        //     console.log("User icon Url est vide pelo c'est la merde");
+        //   }
+          
+        //   // stockage de l'access token
+        //   // AsyncStorage.setItem('access_token', data.access_token);
+
+        // });
     }
   }, [response]);
 
@@ -134,7 +137,7 @@ export default function App() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Image
+          {/* <Image
             source={{
               uri: myArray.length > 0 ? myArray : 'Justinlemeilleurquinousmanqueterriblement!',
             }}
@@ -144,7 +147,7 @@ export default function App() {
               borderRadius: 50,
               marginBottom: 20,
             }}
-          />
+          /> */}
 
           {/* <Text
             style={{
@@ -157,9 +160,9 @@ export default function App() {
           >
             {userTitle ? "Title" : null}
           </Text> */}
-          <Text style={{color: "white", fontSize: 18, height: 40}}>
+          {/* <Text style={{color: "white", fontSize: 18, height: 40}}>
              {userTitle ? `Title : ${userTitle}` : "Welcome to Redditech !"}
-          </Text>
+          </Text> */}
           
           {/* <Text
             style={{
@@ -173,9 +176,9 @@ export default function App() {
             {userTitle ? "Username" : null}
           </Text> */}
 
-          <Text style={{ color: "white", fontSize: 18, height: 40 }}>
+          {/* <Text style={{ color: "white", fontSize: 18, height: 40 }}>
             {userTitle ? `Username : ${username}` : null}
-          </Text>
+          </Text> */}
 
           {/* <Text
             style={{
@@ -189,9 +192,9 @@ export default function App() {
             {userTitle ? "Description" : null}
           </Text> */}
 
-           <Text style={{ color: "white", fontSize: 18, height: 40 }}>
+           {/* <Text style={{ color: "white", fontSize: 18, height: 40 }}>
             {userTitle ? `Description : ${description}` : null}
-           </Text>
+           </Text> */}
 
            {!isLoggedIn && (
             <Button
@@ -202,12 +205,12 @@ export default function App() {
               }}
             />)}
 
-            {isLoggedIn && (
+            {/* {isLoggedIn && (
               <Button
                 title="Logout"
                 onPress={logout}
               />
-            )}
+            )} */}
 
         </View>
       </ScrollView>

@@ -22,7 +22,7 @@ WebBrowser.maybeCompleteAuthSession();
 export default function UserInfo() {
   const [userTitle, setUserTitle] = React.useState("");
   const [username, setUsername] = React.useState("");
-  const [myArray, setUserIcon] = React.useState("");
+  const [myArray, setUserIcon] = React.useState([]);
   const [description, setUserdescription] = React.useState("");
 
   const [isLoggedIn, setIsLoggedIn] = React.useState(false); // gestion apparition bouton de connexion 
@@ -47,7 +47,7 @@ export default function UserInfo() {
         const data = await response.json();
         setUsername(data.name);
         setUserTitle(data.subreddit.title);
-        setUserIcon(data.icon_img);
+        setUserIcon(data.icon_img.split('?'));
         setUserdescription(data.subreddit.public_description);
         console.log(data.icon_img);
       }
@@ -122,21 +122,21 @@ export default function UserInfo() {
   // }, [response]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "grey" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        <AppHeader />
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <Image
             source={{
-              uri: myArray.length > 0 ? myArray : 'Justinlemeilleurquinousmanqueterriblement!',
+              uri: myArray.length > 0 ? myArray[0] : 'Justinlemeilleurquinousmanqueterriblement!',
             }}
             style={{
               width: 100,
               height: 100,
               borderRadius: 50,
               marginBottom: 20,
+              marginTop: 20
             }}
           />
 

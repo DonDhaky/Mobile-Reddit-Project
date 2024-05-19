@@ -7,6 +7,8 @@ import { Box, ScrollView, Textarea } from "@gluestack-ui/themed";
 import { Text, View, SafeAreaView, Image } from "react-native";
 import AppHeader from "@/components/AppHeader";
 import { TextInput } from "react-native";
+import { router } from 'expo-router'
+import { CLIENT_ID, REDIRECT_URI } from "@env";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -16,16 +18,14 @@ const discovery = {
   tokenEndpoint: "https://www.reddit.com/api/v1/access_token",
 };
 
-// const CLIENT_ID = process.env.CLIENT_ID
-// const REDIRECT_URI = process.env.REDIRECT_URI
-
 export default function App() {
   const [request, response, promptAsync] = useAuthRequest(
     {
-      clientId: "Fi4iae9bhuNyqVHnL5enog",
-      scopes: ["identity"],
+
+      clientId: CLIENT_ID, /////////////////////////////// récupération des variables d'env grâce à l'import de "@env"
+      scopes: ['identity'],
       redirectUri: makeRedirectUri({
-        native: "exp://nl2rzzo-anonymous-8081.exp.direct",
+        native: REDIRECT_URI, 
       }),
     },
     discovery
@@ -40,10 +40,10 @@ export default function App() {
 
   React.useEffect(() => {
     if (response?.type === "success") {
-      const clientId = "Fi4iae9bhuNyqVHnL5enog";
+      const clientId = CLIENT_ID;
       const { code: code_code } = response.params;
       console.log("Oauth Access Code:", code_code);
-      const redirectUri = "exp://nl2rzzo-anonymous-8081.exp.direct";
+      const redirectUri = REDIRECT_URI;
 
       fetch("https://www.reddit.com/api/v1/access_token", {
         method: "POST",
@@ -95,6 +95,11 @@ export default function App() {
           }
 
         });
+   // if (response?.type === 'success') {
+     // const { code } = response.params;
+     // console.log(code);
+     // console.log(response);
+     // router.push('/tabs');
     }
   }, [response]);
 
@@ -170,5 +175,18 @@ export default function App() {
         </View>
       </ScrollView>
     </SafeAreaView>
+        
+   // <View>
+   // <Box marginTop="50%">
+   // <Button
+     // disabled={!request}
+     // title="Login"
+     // onPress={() => {
+       // promptAsync();
+     // }}
+   // />
+   // </Box>
+   // </View>
+
   );
 }

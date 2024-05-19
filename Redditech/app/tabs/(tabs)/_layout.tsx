@@ -23,7 +23,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="reddit" color={color} />,
         }}
       />
 
@@ -31,24 +31,16 @@ export default function TabLayout() {
         name="tab1"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
       <Tabs.Screen
         name="tab2"
         options={{
-          title: "Tab 2",
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          title: "Parameters",
+          tabBarIcon: ({ color }) => <TabBarIcon name="info-circle" color={color} />,
         }}
       />
-            <Tabs.Screen
-        name="tab2"
-        options={{
-          title: "Tab 2",
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
-        }}
-      />
-
     </Tabs>
   );
 }

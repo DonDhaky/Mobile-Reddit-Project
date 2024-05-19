@@ -9,6 +9,7 @@ import AppHeader from "@/components/AppHeader";
 import { TextInput } from "react-native";
 import { router } from 'expo-router'
 import { CLIENT_ID, REDIRECT_URI } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -35,15 +36,35 @@ export default function App() {
   const [userTitle, setUserTitle] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [myArray, setUserIcon] = React.useState("");
-  const [Description, setUserdescription] = React.useState("");
+  const [description, setUserdescription] = React.useState("");
 
-
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false); // gestion apparition bouton de connexion 
+  React.useEffect(() => {
+    const checkAccessToken = async () => {
+      const accessToken = await AsyncStorage.getItem('access_token');
+      if (accessToken) {
+        setIsLoggedIn(true);
+      }
+    };
+    checkAccessToken();
+  }, []);
+  
+  const logout = () => {
+    setIsLoggedIn(false);
+    setUserTitle("");
+    setUsername("");
+    setUserIcon("");
+    setUserdescription("");
+    AsyncStorage.removeItem('access_token');
+  };
+  
   React.useEffect(() => {
     if (response?.type === "success") {
       const clientId = CLIENT_ID;
       const { code: code_code } = response.params;
       console.log("Oauth Access Code:", code_code);
       const redirectUri = REDIRECT_URI;
+      setIsLoggedIn(true);
 
       fetch("https://www.reddit.com/api/v1/access_token", {
         method: "POST",
@@ -79,12 +100,12 @@ export default function App() {
           const userIcon = userData.icon_img;
           const myArray = userIcon.split('?');
           console.log("Icon", userIcon);
-          const Description = userData.subreddit.public_description; 
-          console.log('Description User :', Description);
+          const description = userData.subreddit.public_description; 
+          console.log('Description User :', description);
 
           setUsername(username);
           setUserTitle(usertitle);
-          setUserdescription(Description);
+          setUserdescription(description);
 
           // Check if the Url is not empty, pourquoi corriger l'erreur de url vide
           if (myArray[0]) {
@@ -93,6 +114,9 @@ export default function App() {
           else {
             console.log("User icon Url est vide pelo c'est la merde");
           }
+          
+          // stockage de l'access token
+          AsyncStorage.setItem('access_token', data.access_token);
 
         });
    // if (response?.type === 'success') {
@@ -118,9 +142,11 @@ export default function App() {
               width: 100,
               height: 100,
               borderRadius: 50,
+              marginBottom: 20,
             }}
           />
-          <Text
+
+          {/* <Text
             style={{
               color: "white",
               fontSize: 18,
@@ -130,11 +156,12 @@ export default function App() {
             }}
           >
             {userTitle ? "Title" : null}
+          </Text> */}
+          <Text style={{color: "white", fontSize: 18, height: 40}}>
+             {userTitle ? `Title : ${userTitle}` : "Welcome to Redditech !"}
           </Text>
-          <Text style={{ color: "white", fontSize: 18, height: 40 }}>
-            {userTitle ? `Title: ${userTitle}` : "Log in Please"}
-          </Text>
-          <Text
+          
+          {/* <Text
             style={{
               color: "white",
               fontSize: 18,
@@ -144,12 +171,13 @@ export default function App() {
             }}
           >
             {userTitle ? "Username" : null}
-          </Text>
+          </Text> */}
+
           <Text style={{ color: "white", fontSize: 18, height: 40 }}>
-            {userTitle ? username : null}
+            {userTitle ? `Username : ${username}` : null}
           </Text>
 
-          <Text
+          {/* <Text
             style={{
               color: "white",
               fontSize: 18,
@@ -159,19 +187,28 @@ export default function App() {
             }}
           >
             {userTitle ? "Description" : null}
-          </Text>
+          </Text> */}
 
-          <TextInput multiline={true} style={{ color: "white", fontSize: 18, height: 60, overflow: "visible" }}>
-            {Description ? Description : null}
+           <Text style={{ color: "white", fontSize: 18, height: 40 }}>
+            {userTitle ? `Description : ${description}` : null}
+           </Text>
 
-          </TextInput>
-          <Button
+           {!isLoggedIn && (
+            <Button
             disabled={!request}
             title="Login with Reddit"
-            onPress={() => {
-              promptAsync();
-            }}
-          />
+              onPress={() => {
+            promptAsync();
+              }}
+            />)}
+
+            {isLoggedIn && (
+              <Button
+                title="Logout"
+                onPress={logout}
+              />
+            )}
+
         </View>
       </ScrollView>
     </SafeAreaView>

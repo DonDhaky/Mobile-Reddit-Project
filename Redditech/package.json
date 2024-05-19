@@ -18,6 +18,7 @@
     "@gluestack-ui/config": "latest",
     "@gluestack-ui/themed": "^1.1.26",
     "@hookform/resolvers": "^3.3.4",
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-navigation/drawer": "^6.6.7",
     "@react-navigation/native": "^6.1.17",
     "dotenv": "^16.4.5",

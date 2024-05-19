@@ -2,17 +2,11 @@ import * as React from "react";
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { Button } from "react-native";
-import { Box, ScrollView } from "@gluestack-ui/themed";
+import { Box, ScrollView, Textarea } from "@gluestack-ui/themed";
 // import { dotenv } from 'react-native';
 import { Text, View, SafeAreaView, Image } from "react-native";
-
-const Header = () => {
-  return (
-    <View style={{ alignItems: "center", padding: 0, margin: 0, height: 60 }}>
-      <Text style={{ color: "white", fontSize: 24 }}>Redditech</Text>
-    </View>
-  );
-};
+import AppHeader from "@/components/AppHeader";
+import { TextInput } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -41,6 +35,7 @@ export default function App() {
   const [userTitle, setUserTitle] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [myArray, setUserIcon] = React.useState("");
+  const [Description, setUserdescription] = React.useState("");
 
 
   React.useEffect(() => {
@@ -84,12 +79,21 @@ export default function App() {
           const userIcon = userData.icon_img;
           const myArray = userIcon.split('?');
           console.log("Icon", userIcon);
+          const Description = userData.subreddit.public_description; 
+          console.log('Description User :', Description);
 
           setUsername(username);
           setUserTitle(usertitle);
-          setUserIcon(myArray[0]);
+          setUserdescription(Description);
 
-          // Set the user data to state or context for further use
+          // Check if the Url is not empty, pourquoi corriger l'erreur de url vide
+          if (myArray[0]) {
+            setUserIcon(myArray[0]);
+          }
+          else {
+            console.log("User icon Url est vide pelo c'est la merde");
+          }
+
         });
     }
   }, [response]);
@@ -97,13 +101,13 @@ export default function App() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "grey" }}>
       <ScrollView>
-        <Header />
+        <AppHeader />
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <Image
             source={{
-              uri: myArray,
+              uri: myArray.length > 0 ? myArray : 'Justinlemeilleurquinousmanqueterriblement!',
             }}
             style={{
               width: 100,
@@ -137,9 +141,25 @@ export default function App() {
             {userTitle ? "Username" : null}
           </Text>
           <Text style={{ color: "white", fontSize: 18, height: 40 }}>
-            {userTitle ? `Username: ${username}` : null}
+            {userTitle ? username : null}
           </Text>
 
+          <Text
+            style={{
+              color: "white",
+              fontSize: 18,
+              height: 40,
+              fontWeight: 600,
+              textDecorationLine: "underline",
+            }}
+          >
+            {userTitle ? "Description" : null}
+          </Text>
+
+          <TextInput multiline={true} style={{ color: "white", fontSize: 18, height: 60, overflow: "visible" }}>
+            {Description ? Description : null}
+
+          </TextInput>
           <Button
             disabled={!request}
             title="Login with Reddit"

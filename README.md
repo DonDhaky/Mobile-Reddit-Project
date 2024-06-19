@@ -1,1 +1,1 @@
-Test README for the first commit
+Please be aware that this project is not finished yet.
